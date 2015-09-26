@@ -7,14 +7,18 @@
 ## Installation
 
 ```sh
-npm i --save redux-component
+npm install --save redux-component
 ```
 
+Redux Component requires **React 0.13 or later.**
 
-## Demo/Examples
 
-Static hosted [demo site][demo] on GitHub. The code is located under [examples/gh-pages][examples_gh_pages] folder.
+## Documentation
 
+- [Quick Start](docs/quick-start.md#quick-start)
+- [API](docs/api.md#api)
+  - [`Componentize(createStore, reducer, mapDispatchToLifecycle, mapDispatchToActions)`](docs/api.md#componentizecreatestore-reducer-mapdispatchtolifecycle-mapdispatchtoactions)
+- [examples/gh-pages][examples_gh_pages] is [hosted on GitHub][demo]
 
 ## Contributing
 
