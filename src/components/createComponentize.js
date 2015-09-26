@@ -8,6 +8,11 @@ export default function createComponentize (React) {
 
     return function createComponent (render) {
 
+      return class ReduxComponent extends Component {
+        render () {
+          return null;
+        }
+      };
     };
   };
 }

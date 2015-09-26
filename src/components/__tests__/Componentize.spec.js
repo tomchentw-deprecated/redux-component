@@ -37,6 +37,15 @@ describe(`React`, () => {
       it(`returns a function`, () => {
         expect(Componentize()).toBeA(`function`);
       });
+
+      context(`when called with "render" function`, () => {
+        it(`returns a React.Component class`, () => {
+          const ReduxComponent = Componentize()();
+
+          expect(ReduxComponent.prototype).toBeA(Component);
+          expect(ReduxComponent.prototype.render).toBeA(`function`);
+        });
+      });
     });
   });
 });
