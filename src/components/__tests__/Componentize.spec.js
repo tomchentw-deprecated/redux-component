@@ -108,9 +108,12 @@ describe(`React`, () => {
 
       it(`should invoke actions with correct arguments in certain React.Component lifecycle functions`, () => {
         const lifecycleCallbacks = {
-          componentWillReceiveProps (nextProps) {},
-          componentWillUpdate (nextProps, nextState) {},
-          componentDidUpdate (prevProps, prevState) {},
+          componentWillMount (props) {},
+          componentDidMount (props) {},
+          componentWillReceiveProps (props, nextProps) {},
+          componentWillUpdate (props, nextProps) {},
+          componentDidUpdate (props, prevProps) {},
+          componentWillUnmount (props) {},
         };
 
         const spies = Object.keys(lifecycleCallbacks).reduce((acc, key) => {
@@ -121,35 +124,47 @@ describe(`React`, () => {
         const mapDispatchToLifecycle = () => lifecycleCallbacks;
 
         const ReduxComponent = Componentize(createStore, () => ({}), mapDispatchToLifecycle)();
-        const comp = new ReduxComponent();
+        const comp = new ReduxComponent({
+          name: `Tom Chen`,
+        });
 
         Object.keys(spies).forEach(key =>
           expect(spies[key]).toNotHaveBeenCalled()
         );
 
-        comp.componentWillReceiveProps({
+        comp.componentWillMount();
+
+        expect(spies.componentWillMount).toHaveBeenCalledWith({
           name: `Tom Chen`,
+        });
+
+        comp.componentDidMount();
+
+        expect(spies.componentDidMount).toHaveBeenCalledWith({
+          name: `Tom Chen`,
+        });
+
+        comp.componentWillReceiveProps({
+          email: `developer@tomchentw.com`,
         });
 
         expect(spies.componentWillReceiveProps).toHaveBeenCalledWith({
           name: `Tom Chen`,
+        }, {
+          email: `developer@tomchentw.com`,
         });
 
         comp.componentWillUpdate({
           email: `developer@tomchentw.com`,
-        }, {
-          age: 1,
         });
 
         expect(spies.componentWillUpdate).toHaveBeenCalledWith({
-          email: `developer@tomchentw.com`,
+          name: `Tom Chen`,
         }, {
-          age: 1,
+          email: `developer@tomchentw.com`,
         });
 
         comp.componentDidUpdate({
-          name: `Tom Chen`,
-        }, {
           age: 0,
         });
 
@@ -157,6 +172,12 @@ describe(`React`, () => {
           name: `Tom Chen`,
         }, {
           age: 0,
+        });
+
+        comp.componentWillUnmount();
+
+        expect(spies.componentWillUnmount).toHaveBeenCalledWith({
+          name: `Tom Chen`,
         });
       });
     });

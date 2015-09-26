@@ -26,32 +26,32 @@ export default function createComponentize (React) {
           this.lifecycleActions = {
             ...NullLifecycleActions,
             // TODO: componentWillReceiveProps
-            ...mapDispatchToLifecycle(this.store.dispatch, this.props),
+            ...mapDispatchToLifecycle(this.store.dispatch),
           };
         }
 
         componentWillMount () {
-          this.lifecycleActions.componentWillMount();
+          this.lifecycleActions.componentWillMount(this.props);
         }
 
         componentDidMount () {
-          this.lifecycleActions.componentDidMount();
+          this.lifecycleActions.componentDidMount(this.props);
         }
 
         componentWillReceiveProps (nextProps: object) {
-          this.lifecycleActions.componentWillReceiveProps(nextProps);
+          this.lifecycleActions.componentWillReceiveProps(this.props, nextProps);
         }
 
         componentWillUpdate (nextProps: object, nextState: object) {
-          this.lifecycleActions.componentWillUpdate(nextProps, nextState);
+          this.lifecycleActions.componentWillUpdate(this.props, nextProps);
         }
 
         componentDidUpdate (prevProps: object, prevState: object) {
-          this.lifecycleActions.componentDidUpdate(prevProps, prevState);
+          this.lifecycleActions.componentDidUpdate(this.props, prevProps);
         }
 
         componentWillUnmount () {
-          this.lifecycleActions.componentWillUnmount();
+          this.lifecycleActions.componentWillUnmount(this.props);
         }
 
         render () {
