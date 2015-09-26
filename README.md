@@ -1,5 +1,5 @@
 # redux-component [![Travis CI][travis-image]][travis-url] [![Quality][codeclimate-image]][codeclimate-url] [![Coverage][codeclimate-coverage-image]][codeclimate-coverage-url] [![Dependencies][gemnasium-image]][gemnasium-url] [![Gitter][gitter-image]][gitter-url]
-> 
+> Create stateful React Component using goodness from redux
 
 [![Version][npm-image]][npm-url]
 
