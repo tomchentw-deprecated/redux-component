@@ -32,6 +32,10 @@ export default function createComponentize (React) {
           this.eventActions = mapDispatchToActions(this.store.dispatch);
 
           this.state = this.store.getState();
+
+          this.unsubscribeFromStore = this.store.subscribe(() => {
+            this.setState(this.store.getState());
+          });
         }
 
         componentWillMount () {

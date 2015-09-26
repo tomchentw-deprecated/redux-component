@@ -5,16 +5,18 @@ import {
 import {
   default as jsdom,
 } from "mocha-jsdom";
-// TODO: React@0.14
+
 import {
   default as React,
   Children,
   PropTypes,
   Component,
-} from "react/addons";
-// TODO: React@0.14
-// import ReactDOM from `react-dom`;
-// import TestUtils from `react-addons-test-utils`;
+} from "react";
+
+import {
+  default as TestUtils,
+} from "react-addons-test-utils";
+
 import {
   createStore,
 } from "redux";
@@ -22,8 +24,6 @@ import {
 import {
   Componentize,
 } from "../../index";
-
-const {TestUtils} = React.addons;
 
 function noop () {
 }
@@ -191,7 +191,7 @@ describe(`React`, () => {
                 dispatch({
                   type: `CUSTOM_ACTION`,
                 });
-              }
+              },
             };
           };
 
@@ -251,6 +251,67 @@ describe(`React`, () => {
           });
 
           comp.render();
+        });
+      });
+
+      context(`dispatch an action`, () => {
+        it(`should update the state and pass in to render`, (done) => {
+          const mapDispatchToActions = (dispatch) => {
+            return {
+              getOlder () {
+                dispatch({
+                  type: `GET_OLDER`,
+                  age: 1,
+                });
+              },
+            };
+          };
+
+          let initialRender = true;
+
+          const render = (props, state, actions) => {
+            expect(props).toBeA(`object`);
+            expect(props).toEqual({
+              name: `Tom Chen`,
+            });
+
+            if (initialRender) {
+              expect(state).toBeA(`object`);
+              expect(state).toEqual({
+                age: 0,
+              });
+              initialRender = false;
+            } else {
+              expect(state).toBeA(`object`);
+              expect(state).toEqual({
+                age: 1,
+              });
+              done();
+            }
+            return null;
+          };
+
+          const initialState = {
+            age: 0,
+          };
+
+          const reducer = (state = initialState, action) => {
+            if (action.type === `GET_OLDER`) {
+              return {
+                ...state,
+                age: action.age,
+              };
+            }
+            return state;
+          };
+
+          const ReduxComponent = Componentize(createStore, reducer, noop, mapDispatchToActions)(render);
+
+          const comp = TestUtils.renderIntoDocument(
+            <ReduxComponent name="Tom Chen" />
+          );
+
+          comp.eventActions.getOlder();
         });
       });
     });
