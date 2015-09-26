@@ -39,15 +39,15 @@ export default function createComponentize (React) {
         }
 
         componentWillReceiveProps (nextProps: object) {
-          this.lifecycleActions.componentWillReceiveProps();
+          this.lifecycleActions.componentWillReceiveProps(nextProps);
         }
 
         componentWillUpdate (nextProps: object, nextState: object) {
-          this.lifecycleActions.componentWillUpdate();
+          this.lifecycleActions.componentWillUpdate(nextProps, nextState);
         }
 
         componentDidUpdate (prevProps: object, prevState: object) {
-          this.lifecycleActions.componentDidUpdate();
+          this.lifecycleActions.componentDidUpdate(prevProps, prevState);
         }
 
         componentWillUnmount () {

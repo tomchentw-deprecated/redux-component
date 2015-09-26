@@ -105,6 +105,60 @@ describe(`React`, () => {
           expect(spies[key]).toHaveBeenCalled()
         );
       });
+
+      it(`should invoke actions with correct arguments in certain React.Component lifecycle functions`, () => {
+        const lifecycleCallbacks = {
+          componentWillReceiveProps (nextProps) {},
+          componentWillUpdate (nextProps, nextState) {},
+          componentDidUpdate (prevProps, prevState) {},
+        };
+
+        const spies = Object.keys(lifecycleCallbacks).reduce((acc, key) => {
+          acc[key] = expect.spyOn(lifecycleCallbacks, key);
+          return acc;
+        }, {});
+
+        const mapDispatchToLifecycle = () => lifecycleCallbacks;
+
+        const ReduxComponent = Componentize(createStore, () => ({}), mapDispatchToLifecycle)();
+        const comp = new ReduxComponent();
+
+        Object.keys(spies).forEach(key =>
+          expect(spies[key]).toNotHaveBeenCalled()
+        );
+
+        comp.componentWillReceiveProps({
+          name: `Tom Chen`,
+        });
+
+        expect(spies.componentWillReceiveProps).toHaveBeenCalledWith({
+          name: `Tom Chen`,
+        });
+
+        comp.componentWillUpdate({
+          email: `developer@tomchentw.com`,
+        }, {
+          age: 1,
+        });
+
+        expect(spies.componentWillUpdate).toHaveBeenCalledWith({
+          email: `developer@tomchentw.com`,
+        }, {
+          age: 1,
+        });
+
+        comp.componentDidUpdate({
+          name: `Tom Chen`,
+        }, {
+          age: 0,
+        });
+
+        expect(spies.componentDidUpdate).toHaveBeenCalledWith({
+          name: `Tom Chen`,
+        }, {
+          age: 0,
+        });
+      });
     });
   });
 });
