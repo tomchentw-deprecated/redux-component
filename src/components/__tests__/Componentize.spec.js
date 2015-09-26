@@ -201,6 +201,7 @@ describe(`React`, () => {
 
           const render = (props, state, actions) => {
             expect(actions.customAction).toBeA(`function`);
+            actions.customAction();
             done();
           };
 
