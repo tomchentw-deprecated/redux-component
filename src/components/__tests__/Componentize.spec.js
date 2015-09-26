@@ -32,5 +32,11 @@ describe(`React`, () => {
     it(`should exist`, () => {
       expect(Componentize).toExist();
     });
+
+    context(`when called`, () => {
+      it(`returns a function`, () => {
+        expect(Componentize()).toBeA(`function`);
+      });
+    });
   });
 });

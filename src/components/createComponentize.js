@@ -6,5 +6,8 @@ export default function createComponentize (React) {
 
   return function Componentize () {
 
+    return function createComponent (render) {
+
+    };
   };
 }
