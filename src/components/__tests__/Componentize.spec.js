@@ -39,12 +39,21 @@ describe(`React`, () => {
       });
 
       context(`when called with "render" function`, () => {
-        it(`returns a React.Component class`, () => {
+        it(`returns ReduxComponent, a React.Component class`, () => {
           const ReduxComponent = Componentize()();
 
           expect(ReduxComponent.prototype).toBeA(Component);
           expect(ReduxComponent.prototype.render).toBeA(`function`);
         });
+      });
+    });
+
+    describe(`(createStore, reducer)`, () => {
+      it(`should create redux store inside the constructor of the ReduxComponent`, () => {
+        const ReduxComponent = Componentize(createStore, () => ({}))();
+        const comp = new ReduxComponent();
+
+        expect(comp.store).toBeA(`object`);
       });
     });
   });
