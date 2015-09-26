@@ -59,7 +59,15 @@ export default function createComponentize (React) {
         }
 
         componentWillUnmount () {
+          this.unsubscribeFromStore();
+          this.unsubscribeFromStore = null;
+
+          this.eventActions = null;
+
           this.lifecycleActions.componentWillUnmount(this.props);
+          this.lifecycleActions = null;
+
+          this.store = null;
         }
 
         render () {

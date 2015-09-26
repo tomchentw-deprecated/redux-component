@@ -14,6 +14,10 @@ import {
 } from "react";
 
 import {
+  default as ReactDOM,
+} from "react-dom";
+
+import {
   default as TestUtils,
 } from "react-addons-test-utils";
 
@@ -288,7 +292,9 @@ describe(`React`, () => {
               });
               done();
             }
-            return null;
+            return (
+              <div />
+            );
           };
 
           const initialState = {
@@ -307,12 +313,47 @@ describe(`React`, () => {
 
           const ReduxComponent = Componentize(createStore, reducer, noop, mapDispatchToActions)(render);
 
-          const comp = TestUtils.renderIntoDocument(
+          const div = document.createElement(`div`);
+
+          const comp = ReactDOM.render(
             <ReduxComponent name="Tom Chen" />
-          );
+          , div);
 
           comp.eventActions.getOlder();
+
+          ReactDOM.unmountComponentAtNode(div);
         });
+      });
+
+      it(`will clean up Component after unmount`, () => {
+
+        const mapDispatchToActions = (dispatch) => {
+          return {
+            getOlder () {
+              dispatch({
+                type: `GET_OLDER`,
+                age: 1,
+              });
+            },
+          };
+        };
+
+        const ReduxComponent = Componentize(createStore, () => ({}), noop, mapDispatchToActions)(() => (<div />));
+
+        const div = document.createElement(`div`);
+
+        const comp = ReactDOM.render(
+          <ReduxComponent name="Tom Chen" />
+        , div);
+
+        comp.eventActions.getOlder();
+
+        ReactDOM.unmountComponentAtNode(div);
+
+        expect(comp.unsubscribeFromStore).toNotExist();
+        expect(comp.eventActions).toNotExist();
+        expect(comp.lifecycleActions).toNotExist();
+        expect(comp.store).toNotExist();
       });
     });
   });
