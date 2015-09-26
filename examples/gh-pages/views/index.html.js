@@ -11,12 +11,12 @@ import {
 export default (
   <html>
     <head>
-      <title>| tomchentw</title>
+      <title>redux-component | tomchentw</title>
       <meta name="viewport" content="width=device-width, initial-scale=1"/>
       <meta charSet="UTF-8" />
       <WebpackStyleEntry
         chunkName="client"
-        chunkFilepath="./scripts/client.js"
+        chunkFilepath="./src/client.js"
         configFilepath="../Client.webpackConfig.js"
       />
       <WebpackScriptEntry
@@ -30,12 +30,12 @@ export default (
         id="react-container"
         tagName="div"
         chunkName="server"
-        chunkFilepath="./scripts/server.js"
+        chunkFilepath="./src/server.js"
         configFilepath="../Server.webpackConfig.js"
       />
       <WebpackScriptEntry
         chunkName="client"
-        chunkFilepath="./scripts/client.js"
+        chunkFilepath="./src/client.js"
         configFilepath="../Client.webpackConfig.js"
       />
     </body>
