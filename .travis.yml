@@ -4,7 +4,7 @@ node_js:
 script:
 - npm run test:cov
 after_script:
-- if [[ `node --version` == *v0.12* ]]; then cat ./coverage/lcov.info | ./node_modules/.bin/codeclimate-test-reporter;
+- if [[ `node --version` == *v4* ]]; then cat ./coverage/lcov.info | ./node_modules/.bin/codeclimate-test-reporter;
   fi
 env:
   global:
