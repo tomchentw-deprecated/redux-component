@@ -14,7 +14,7 @@ export default function createComponentize (React) {
     componentWillUnmount () {},
   };
 
-  return function Componentize (createStore, reducer, mapDispatchToLifecycle) {
+  return function Componentize (createStore, reducer, mapDispatchToLifecycle, mapDispatchToActions) {
 
     return function createComponent (render) {
 
@@ -28,6 +28,8 @@ export default function createComponentize (React) {
             // TODO: componentWillReceiveProps
             ...mapDispatchToLifecycle(this.store.dispatch),
           };
+
+          this.eventActions = mapDispatchToActions(this.store.dispatch);
         }
 
         componentWillMount () {
@@ -55,7 +57,7 @@ export default function createComponentize (React) {
         }
 
         render () {
-          return null;
+          return render(this.props, this.state, this.eventActions);
         }
       };
     };

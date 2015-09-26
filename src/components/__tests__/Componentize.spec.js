@@ -53,7 +53,7 @@ describe(`React`, () => {
 
     describe(`(createStore, reducer)`, () => {
       it(`should create redux store inside the constructor of the ReduxComponent`, () => {
-        const ReduxComponent = Componentize(createStore, () => ({}), noop)();
+        const ReduxComponent = Componentize(createStore, () => ({}), noop, noop)();
         const comp = new ReduxComponent();
 
         expect(comp.store).toBeA(`object`);
@@ -62,7 +62,7 @@ describe(`React`, () => {
 
     describe(`(_1, _2, mapDispatchToLifecycle)`, () => {
       it(`should contain React.Component lifecycle functions`, () => {
-        const ReduxComponent = Componentize(createStore, () => ({}), noop)();
+        const ReduxComponent = Componentize(createStore, () => ({}), noop, noop)();
         const comp = new ReduxComponent();
 
         expect(comp.componentWillMount).toBeA(`function`);
@@ -90,7 +90,7 @@ describe(`React`, () => {
 
         const mapDispatchToLifecycle = () => lifecycleCallbacks;
 
-        const ReduxComponent = Componentize(createStore, () => ({}), mapDispatchToLifecycle)();
+        const ReduxComponent = Componentize(createStore, () => ({}), mapDispatchToLifecycle, noop)();
         const comp = new ReduxComponent();
 
         Object.keys(spies).forEach(key =>
@@ -123,7 +123,7 @@ describe(`React`, () => {
 
         const mapDispatchToLifecycle = () => lifecycleCallbacks;
 
-        const ReduxComponent = Componentize(createStore, () => ({}), mapDispatchToLifecycle)();
+        const ReduxComponent = Componentize(createStore, () => ({}), mapDispatchToLifecycle, noop)();
         const comp = new ReduxComponent({
           name: `Tom Chen`,
         });
@@ -178,6 +178,32 @@ describe(`React`, () => {
 
         expect(spies.componentWillUnmount).toHaveBeenCalledWith({
           name: `Tom Chen`,
+        });
+      });
+    });
+    
+    describe(`(_1, _2, _3, mapDispatchToActions) with render function`, () => {
+      context(`(_1, _2, _3, mapDispatchToActions)`, () => {
+        it(`should pass actions as third arguments of render`, (done) => {
+          const mapDispatchToActions = (dispatch) => {
+            return {
+              customAction () {
+                dispatch({
+                  type: `CUSTOM_ACTION`,
+                });
+              }
+            };
+          };
+
+          const render = (props, state, actions) => {
+            expect(actions.customAction).toBeA(`function`);
+            done();
+          };
+
+          const ReduxComponent = Componentize(createStore, () => ({}), noop, mapDispatchToActions)(render);
+          const comp = new ReduxComponent();
+
+          comp.render();
         });
       });
     });
