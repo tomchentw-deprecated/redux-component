@@ -25,6 +25,9 @@ import {
 
 const {TestUtils} = React.addons;
 
+function noop () {
+}
+
 describe(`React`, () => {
   describe(`Componentize`, () => {
     jsdom();
@@ -50,7 +53,7 @@ describe(`React`, () => {
 
     describe(`(createStore, reducer)`, () => {
       it(`should create redux store inside the constructor of the ReduxComponent`, () => {
-        const ReduxComponent = Componentize(createStore, () => ({}))();
+        const ReduxComponent = Componentize(createStore, () => ({}), noop)();
         const comp = new ReduxComponent();
 
         expect(comp.store).toBeA(`object`);
@@ -59,7 +62,7 @@ describe(`React`, () => {
 
     describe(`(_1, _2, mapDispatchToLifecycle)`, () => {
       it(`should contain React.Component lifecycle functions`, () => {
-        const ReduxComponent = Componentize(createStore, () => ({}), {})();
+        const ReduxComponent = Componentize(createStore, () => ({}), noop)();
         const comp = new ReduxComponent();
 
         expect(comp.componentWillMount).toBeA(`function`);
@@ -68,6 +71,39 @@ describe(`React`, () => {
         expect(comp.componentWillUpdate).toBeA(`function`);
         expect(comp.componentDidUpdate).toBeA(`function`);
         expect(comp.componentWillUnmount).toBeA(`function`);
+      });
+
+      it(`should invoke action inside React.Component lifecycle functions`, () => {
+        const lifecycleCallbacks = {
+          componentWillMount () {},
+          componentDidMount () {},
+          componentWillReceiveProps () {},
+          componentWillUpdate () {},
+          componentDidUpdate () {},
+          componentWillUnmount () {},
+        };
+
+        const spies = Object.keys(lifecycleCallbacks).reduce((acc, key) => {
+          acc[key] = expect.spyOn(lifecycleCallbacks, key);
+          return acc;
+        }, {});
+
+        const mapDispatchToLifecycle = () => lifecycleCallbacks;
+
+        const ReduxComponent = Componentize(createStore, () => ({}), mapDispatchToLifecycle)();
+        const comp = new ReduxComponent();
+
+        Object.keys(spies).forEach(key =>
+          expect(spies[key]).toNotHaveBeenCalled()
+        );
+
+        Object.keys(lifecycleCallbacks).forEach(key =>
+          comp[key]()
+        );
+
+        Object.keys(spies).forEach(key =>
+          expect(spies[key]).toHaveBeenCalled()
+        );
       });
     });
   });
