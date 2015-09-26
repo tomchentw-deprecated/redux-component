@@ -206,6 +206,53 @@ describe(`React`, () => {
           comp.render();
         });
       });
+
+      context(`render`, () => {
+        it(`should pass props and undefined state`, (done) => {
+          const render = (props, state, actions) => {
+            expect(props).toBeA(`object`);
+            expect(props).toEqual({
+              name: `Tom Chen`,
+            });
+
+            expect(state).toBeA(`undefined`);
+            done();
+          };
+
+          const ReduxComponent = Componentize(createStore, () => undefined, noop, noop)(render);
+          const comp = new ReduxComponent({
+            name: `Tom Chen`,
+          });
+
+          comp.render();
+        });
+
+        it(`should pass props and initial state from reducer`, (done) => {
+          const render = (props, state, actions) => {
+            expect(props).toBeA(`object`);
+            expect(props).toEqual({
+              name: `Tom Chen`,
+            });
+
+            expect(state).toBeA(`object`);
+            expect(state).toEqual({
+              age: 0,
+            });
+            done();
+          };
+
+          const initialState = {
+            age: 0,
+          };
+
+          const ReduxComponent = Componentize(createStore, () => initialState, noop, noop)(render);
+          const comp = new ReduxComponent({
+            name: `Tom Chen`,
+          });
+
+          comp.render();
+        });
+      });
     });
   });
 });
