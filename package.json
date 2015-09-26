@@ -1,0 +1,43 @@
+{
+  "name": "redux-component",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/index.js",
+  "files": [
+    "lib/",
+    "src/",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "clean": "rimraf lib",
+    "prebuild": "npm run lint && npm run clean",
+    "build": "babel src --out-dir lib",
+    "lint": "eslint src",
+    "test": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomchentw/redux-component"
+  },
+  "keywords": [
+    "react",
+    "react-component",
+    "flux",
+    "redux",
+    "component"
+  ],
+  "author": {
+    "name": "tomchentw",
+    "email": "developer@tomchentw.com",
+    "url": "https://github.com/tomchentw"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tomchentw/redux-component/issues"
+  },
+  "homepage": "https://tomchentw.github.io/redux-component/",
+  "devDependencies": {
+  },
+  "dependencies": {
+  }
+}
