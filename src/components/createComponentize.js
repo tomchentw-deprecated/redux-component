@@ -14,6 +14,24 @@ export default function createComponentize (React) {
           this.store = createStore(reducer);
         }
 
+        componentWillMount () {
+        }
+
+        componentDidMount () {
+        }
+
+        componentWillReceiveProps (nextProps: object) {
+        }
+
+        componentWillUpdate (nextProps: object, nextState: object) {
+        }
+
+        componentDidUpdate (prevProps: object, prevState: object) {
+        }
+
+        componentWillUnmount () {
+        }
+
         render () {
           return null;
         }

@@ -56,5 +56,19 @@ describe(`React`, () => {
         expect(comp.store).toBeA(`object`);
       });
     });
+
+    describe(`(_1, _2, mapDispatchToLifecycle)`, () => {
+      it(`should contain React.Component lifecycle functions`, () => {
+        const ReduxComponent = Componentize(createStore, () => ({}), {})();
+        const comp = new ReduxComponent();
+
+        expect(comp.componentWillMount).toBeA(`function`);
+        expect(comp.componentDidMount).toBeA(`function`);
+        expect(comp.componentWillReceiveProps).toBeA(`function`);
+        expect(comp.componentWillUpdate).toBeA(`function`);
+        expect(comp.componentDidUpdate).toBeA(`function`);
+        expect(comp.componentWillUnmount).toBeA(`function`);
+      });
+    });
   });
 });
