@@ -3,8 +3,10 @@ node_js:
 - '0.12'
 - '0.10'
 script:
-  - npm run test:cov
+- npm run test:cov
 after_script:
-  - if [[ `node --version` == *v0.12* ]]; then cat ./coverage/lcov.info | ./node_modules/.bin/codeclimate-test-reporter; fi
+- if [[ `node --version` == *v0.12* ]]; then cat ./coverage/lcov.info | ./node_modules/.bin/codeclimate-test-reporter;
+  fi
 env:
   global:
+    secure: hoegzX+4E81skdHJMxnSJxW8rLy5M5mmGm6pTjfr1qxvcMJz2NFuGTbHQ1ukxKPUpa6JHnL86pLpJ3WKWLGWjvcaBJ8zFdPS5XYNhfCgT+EsGPZ1pAHNX/9oCqdaZeDeQKq3KCog4uAfR36mvHWfgM57EL3TN5ecq/5E9Q4Z41p4nrQsf1SLjeNw5y/jfD86HaBiHaqa2qWiZVoB25jsdv/WeoLDUnAK5TjuDUmH1te3EIDJ+wYIO2jNY/TAP9ijY0TMswK/wb1r0IrQHsARLbrP5qV541pGf8N9t+9bfdLaQngmu/jA2WKVJ6Fijb93RVXLks9n9wPyyzBa9tLtbE4ct1+pZQNjk97RVDP1LXFE6kP6Ex1AKC6mhYa3LAgqFgxeREerfsnqoVZaSQNqJ74vqd5ODsKvddQLozDIz+Ak+uCBQYv533RWRwCUhco8XP+uiZMnPBsc9vwVQkp7m+9Z6r3lDFSiHu4t10T4TVY1XZMgT69rWOYNzayAI54g/BNWHFQF/aJqVrxPJPsijLAftUcui3X2BRg5TYcVKSqO5BFXJO0doy+RT/ClW/IQgDdBayKJxlieJPUd5zcuX6+lAvvxdezEbiE24CVBc6JB0jZms3MxAAWQDMPKHgjGIZs2dcPSosrwFNUv3dh62/ncSpPMG+TobKnsxp/4isc=
