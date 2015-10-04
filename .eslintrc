@@ -24,8 +24,5 @@
     // Stylistic Issues
     "camelcase": [0],
     "no-underscore-dangle": [0],
-  },
-  "globals": {
-    "google": true,
   }
 }
