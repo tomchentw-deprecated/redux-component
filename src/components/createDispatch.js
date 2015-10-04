@@ -5,9 +5,7 @@ import {
 function noop () {
 }
 
-export default function createDispatch (component, reducer) {
-  const store = createStore(reducer);
-
+export function createDispatchWithStore (component, store) {
   component.state = store.getState();
 
   const unsubscribeFromStore = store.subscribe(() => {
@@ -22,4 +20,8 @@ export default function createDispatch (component, reducer) {
   };
 
   return store.dispatch;
+}
+
+export default function createDispatch (component, reducer) {
+  return createDispatchWithStore(component, createStore(reducer));
 }

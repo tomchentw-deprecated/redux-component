@@ -1,4 +1,8 @@
 
+import {
+  createDispatchWithStore,
+} from "./createDispatch";
+
 export default function createComponentize (React) {
   const {
     Component,
@@ -21,21 +25,15 @@ export default function createComponentize (React) {
       return class ReduxComponent extends Component {
         constructor (...args) {
           super(...args);
-          this.store = createStore(reducer);
+          const dispatch = createDispatchWithStore(this, createStore(reducer));
 
           this.lifecycleActions = {
             ...NullLifecycleActions,
             // TODO: componentWillReceiveProps
-            ...mapDispatchToLifecycle(this.store.dispatch),
+            ...mapDispatchToLifecycle(dispatch),
           };
 
-          this.eventActions = mapDispatchToActions(this.store.dispatch);
-
-          this.state = this.store.getState();
-
-          this.unsubscribeFromStore = this.store.subscribe(() => {
-            this.setState(this.store.getState());
-          });
+          this.eventActions = mapDispatchToActions(dispatch);
         }
 
         componentWillMount () {
@@ -59,15 +57,10 @@ export default function createComponentize (React) {
         }
 
         componentWillUnmount () {
-          this.unsubscribeFromStore();
-          this.unsubscribeFromStore = null;
-
           this.eventActions = null;
 
           this.lifecycleActions.componentWillUnmount(this.props);
           this.lifecycleActions = null;
-
-          this.store = null;
         }
 
         render () {

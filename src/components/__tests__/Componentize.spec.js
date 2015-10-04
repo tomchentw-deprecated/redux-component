@@ -55,15 +55,6 @@ describe(`React`, () => {
       });
     });
 
-    describe(`(createStore, reducer)`, () => {
-      it(`should create redux store inside the constructor of the ReduxComponent`, () => {
-        const ReduxComponent = Componentize(createStore, () => ({}), noop, noop)();
-        const comp = new ReduxComponent();
-
-        expect(comp.store).toBeA(`object`);
-      });
-    });
-
     describe(`(_1, _2, mapDispatchToLifecycle)`, () => {
       it(`should contain React.Component lifecycle functions`, () => {
         const ReduxComponent = Componentize(createStore, () => ({}), noop, noop)();
