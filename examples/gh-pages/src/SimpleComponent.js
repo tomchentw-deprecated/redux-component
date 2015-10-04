@@ -196,11 +196,11 @@ export const Component = createComponent(function SimpleComponent (props, state,
   };
 
   return (
-    <form onSubmit={actions.submitForm.bind(null, props)}>
+    <form onSubmit={e => actions.submitForm(props, e)}>
       {renderUsername()}
       {renderError()}
-      <input type="text" value={state.formValues.name} onChange={actions.textChanged.bind(null, `name`)} />
-      <input type="email" value={state.formValues.email} onChange={actions.textChanged.bind(null, `email`)} />
+      <input type="text" value={state.formValues.name} onChange={e => actions.textChanged(`name`, e)} />
+      <input type="email" value={state.formValues.email} onChange={e => actions.textChanged(`email`, e)} />
       <button type="submit">Hi</button>
     </form>
   );
