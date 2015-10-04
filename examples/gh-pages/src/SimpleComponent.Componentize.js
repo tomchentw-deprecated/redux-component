@@ -171,34 +171,33 @@ const mapDispatchToActions = (dispatch) => {
 
 const createComponent = Componentize(createStoreWithMiddleware, reducer, mapDispatchToLifecycle, mapDispatchToActions);
 
-export const Component = createComponent(function SimpleComponent (props, state, actions) {
-
-  const renderError = () => {
-    if (state.error) {
-      return (
-        <p className="error">{state.error.message}</p>
-      );
-    } else {
-      return null;
-    }
+const renderUsername = (usernameLoading, userId, username) => {
+  if (usernameLoading) {
+    return (
+      <label>Username loading ... (user id: {userId})</label>
+    )
+  } else {
+    return (
+      <label>Your username: {username}</label>
+    )
   }
+};
 
-  const renderUsername = () => {
-    if (state.usernameLoading) {
-      return (
-        <label>Username loading ... (user id: {props.userId})</label>
-      )
-    } else {
-      return (
-        <label>Your username: {state.username}</label>
-      )
-    }
-  };
+const renderError = (error) => {
+  if (error) {
+    return (
+      <p className="error">{error.message}</p>
+    );
+  } else {
+    return null;
+  }
+};
 
+export const Component = createComponent(function SimpleComponent (props, state, actions) {
   return (
     <form onSubmit={e => actions.submitForm(props, e)}>
-      {renderUsername()}
-      {renderError()}
+      {renderUsername(state.usernameLoading, props.userId, state.username)}
+      {renderError(state.error)}
       <input type="text" value={state.formValues.name} onChange={e => actions.textChanged(`name`, e)} />
       <input type="email" value={state.formValues.email} onChange={e => actions.textChanged(`email`, e)} />
       <button type="submit">Hi</button>
