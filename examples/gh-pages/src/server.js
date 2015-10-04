@@ -1,3 +1,3 @@
-import {Component as SimpleComponent} from "./SimpleComponent";
+import {default as ReactRoot} from "./ReactRoot";
 
-export default SimpleComponent;
+export default ReactRoot;

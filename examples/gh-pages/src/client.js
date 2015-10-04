@@ -1,9 +1,9 @@
 import {default as React} from "react";
 
-import {Component as SimpleComponent} from "./SimpleComponent.Componentize";
+import {default as ReactRoot} from "./ReactRoot";
 
 React.render((
-  <SimpleComponent />
+  <ReactRoot />
 ),
   document.getElementById("react-container")
 );

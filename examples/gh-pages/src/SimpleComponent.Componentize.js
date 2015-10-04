@@ -1,8 +1,8 @@
 import React from "react";
 import { createStore, applyMiddleware, bindActionCreators } from "redux";
-import { connect } from "react-redux";
 import thunkMiddleware from "redux-thunk";
 import { Componentize } from "../../../src/index";
+import randomPromise from "./randomPromise";
 
 const TEXT_CHANGED = `redux-component/example/gh-pages/SimpleComponent/TEXT_CHANGED`;
 
@@ -211,15 +211,3 @@ Component.defaultProps = {
   globlaReduxActionGetUsername: randomPromise,
   globlaReduxActionSubmitForm: randomPromise,
 };
-
-function randomPromise () {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (Math.random() > 0.2) {
-        resolve(`tomchentw`);
-      } else {
-        reject(new Error(`Hey you've got some random error from your API response...`));
-      }
-    }, 1000);
-  });
-}
