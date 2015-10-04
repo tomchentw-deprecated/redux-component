@@ -7,7 +7,7 @@ var PRODUCTION_PLUGINS;
 
 if ("production" === process.env.NODE_ENV) {
   PRODUCTION_PLUGINS = [
-    // Safe effect as webpack -p
+    // Same effect as webpack -p
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
   ];
@@ -18,7 +18,7 @@ if ("production" === process.env.NODE_ENV) {
 var externals = [
   require("./package.json").dependencies,
   require("../../package.json").dependencies,
-].reduce(function (acc, dependencies) {
+].reduce(function (acc, dependencies={}) {
   return acc.concat(
     Object.keys(dependencies)
       .map(function (key) { return new RegExp("^" + key); })
