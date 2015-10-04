@@ -3,8 +3,8 @@ import {
 } from "react";
 
 import {
-  default as createComponentize,
-} from "./components/createComponentize";
+  default as ComponentizeCreator,
+} from "./components/ComponentizeCreator";
 
 import {
   default as createDispatch,
@@ -14,7 +14,7 @@ import {
   default as ReduxComponentMixin,
 } from "./components/ReduxComponentMixin";
 
-export const Componentize = createComponentize(React);
+export const Componentize = ComponentizeCreator(React);
 
 export {createDispatch};
 
