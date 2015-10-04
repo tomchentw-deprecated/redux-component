@@ -190,37 +190,47 @@ describe(`React`, () => {
             };
           };
 
+          let customActionTriggered = false;          
+
           const render = (props, state, actions) => {
             expect(actions.customAction).toBeA(`function`);
-            actions.customAction();
-            done();
+            if (!customActionTriggered) {
+              // Emulate some event handler triggerd this action.
+              setTimeout(() => {
+                actions.customAction();
+                done();
+              });
+              customActionTriggered = true;
+            }
+            return <div />;
           };
 
           const ReduxComponent = Componentize(createStore, () => ({}), noop, mapDispatchToActions)(render);
-          const comp = new ReduxComponent();
 
-          comp.render();
+          const comp = TestUtils.renderIntoDocument(<ReduxComponent />);
         });
       });
 
       context(`render`, () => {
-        it(`should pass props and undefined state`, (done) => {
+        it(`should pass props and null state`, (done) => {
           const render = (props, state, actions) => {
             expect(props).toBeA(`object`);
             expect(props).toEqual({
               name: `Tom Chen`,
             });
 
-            expect(state).toBeA(`undefined`);
+            expect(state).toEqual(null);
             done();
+            return <div />;
           };
 
           const ReduxComponent = Componentize(createStore, () => undefined, noop, noop)(render);
-          const comp = new ReduxComponent({
-            name: `Tom Chen`,
-          });
 
-          comp.render();
+          const comp = TestUtils.renderIntoDocument(
+            <ReduxComponent
+              name="Tom Chen"
+            />
+          );
         });
 
         it(`should pass props and initial state from reducer`, (done) => {
@@ -235,6 +245,7 @@ describe(`React`, () => {
               age: 0,
             });
             done();
+            return <div />;
           };
 
           const initialState = {
@@ -242,11 +253,12 @@ describe(`React`, () => {
           };
 
           const ReduxComponent = Componentize(createStore, () => initialState, noop, noop)(render);
-          const comp = new ReduxComponent({
-            name: `Tom Chen`,
-          });
 
-          comp.render();
+          const comp = TestUtils.renderIntoDocument(
+            <ReduxComponent
+              name="Tom Chen"
+            />
+          );
         });
       });
 
@@ -276,6 +288,9 @@ describe(`React`, () => {
               expect(state).toEqual({
                 age: 0,
               });
+              // Emulate some event handler triggerd this action.
+              setTimeout(actions.getOlder);
+
               initialRender = false;
             } else {
               expect(state).toBeA(`object`);
@@ -305,40 +320,22 @@ describe(`React`, () => {
 
           const ReduxComponent = Componentize(createStore, reducer, noop, mapDispatchToActions)(render);
 
-          const div = document.createElement(`div`);
-
-          const comp = ReactDOM.render(
-            <ReduxComponent name="Tom Chen" />
-          , div);
-
-          comp.eventActions.getOlder();
-
-          ReactDOM.unmountComponentAtNode(div);
+          const comp = TestUtils.renderIntoDocument(
+            <ReduxComponent
+              name="Tom Chen"
+            />
+          );
         });
       });
 
       it(`will clean up Component after unmount`, () => {
-
-        const mapDispatchToActions = (dispatch) => {
-          return {
-            getOlder () {
-              dispatch({
-                type: `GET_OLDER`,
-                age: 1,
-              });
-            },
-          };
-        };
-
-        const ReduxComponent = Componentize(createStore, () => ({}), noop, mapDispatchToActions)(() => (<div />));
+        const ReduxComponent = Componentize(createStore, () => ({}), noop, noop)(() => (<div />));
 
         const div = document.createElement(`div`);
 
         const comp = ReactDOM.render(
           <ReduxComponent name="Tom Chen" />
         , div);
-
-        comp.eventActions.getOlder();
 
         ReactDOM.unmountComponentAtNode(div);
 
