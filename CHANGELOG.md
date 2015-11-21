@@ -1,3 +1,14 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/tomchentw/redux-component/compare/v0.1.0...v0.2.0) (2015-11-21)
+
+
+### Features
+
+* **createDispatch:** expose dispatch in Component's constructor ([a114666](https://github.com/tomchentw/redux-component/commit/a114666))
+* **ReduxComponentMixin:** createDispatch alias for React.createClass ([d710669](https://github.com/tomchentw/redux-component/commit/d710669))
+
+
+
 <a name"0.1.0"></a>
 ## 0.1.0 (2015-09-27)
 
