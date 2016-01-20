@@ -1,21 +1,13 @@
+/* eslint-disable func-names */
+/* eslint-disable new-cap */
+
 import {
   default as expect,
 } from "expect";
 
 import {
-  default as jsdom,
-} from "mocha-jsdom";
-
-import {
   default as React,
-  Children,
-  PropTypes,
-  Component,
 } from "react";
-
-import {
-  default as ReactDOM,
-} from "react-dom";
 
 import {
   default as TestUtils,
@@ -25,43 +17,44 @@ import {
   ReduxComponentMixin,
 } from "../../index";
 
-function noop () {
-}
-
-describe(`redux-component`, () => {
-  describe(`ReduxComponentMixin`, () => {
-    jsdom();
-
-    it(`should exist`, () => {
+describe(`redux-component`, function () {
+  describe(`ReduxComponentMixin`, function () {
+    it(`should exist`, function () {
       expect(ReduxComponentMixin).toExist();
     });
 
-    it(`should have signature of (reducer)`, () => {
+    it(`should have signature of (reducer)`, function () {
       expect(ReduxComponentMixin.length).toEqual(1);
     });
 
-    it(`returns a mixin object`, () => {
+    it(`returns a mixin object`, function () {
       const mixin = ReduxComponentMixin(() => ({}));
 
       expect(mixin.getInitialState).toBeA(`function`, `and have getInitialState function`);
-      expect(mixin.componentWillUnmount).toBeA(`function`, `and have componentWillUnmount function`);
+      expect(mixin.componentWillUnmount).toBeA(
+        `function`, `and have componentWillUnmount function`
+      );
     });
 
-    describe(`mixed into React.createClass`, () => {
+    describe(`mixed into React.createClass`, function () {
       let mockedComp;
 
-      beforeEach(() => {
-        const mockedReducer = (state = {value: `INITIAL_STATE`}, action) => ({...state, ...action});
+      beforeEach(function () {
+        const mockedReducer = (state = { value: `INITIAL_STATE` }, action) => (
+          { ...state, ...action }
+        );
 
+        /* eslint-disable react/prefer-es6-class */
         const MockedComponent = React.createClass({
           mixins: [ReduxComponentMixin(mockedReducer)],
-          render () { return <div/>; },
+          render() { return <div/>; },
         });
+        /* eslint-enable react/prefer-es6-class */
 
         mockedComp = TestUtils.renderIntoDocument(<MockedComponent />);
       });
 
-      it(`should have initial state from reducer`, () => {
+      it(`should have initial state from reducer`, function () {
         expect(mockedComp.state.value).toEqual(`INITIAL_STATE`);
       });
 

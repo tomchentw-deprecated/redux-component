@@ -1,3 +1,5 @@
+/* eslint-disable new-cap */
+
 import {
   default as React,
 } from "react";
@@ -16,6 +18,6 @@ import {
 
 export const Componentize = ComponentizeCreator(React);
 
-export {createDispatch};
+export { createDispatch };
 
-export {ReduxComponentMixin};
+export { ReduxComponentMixin };

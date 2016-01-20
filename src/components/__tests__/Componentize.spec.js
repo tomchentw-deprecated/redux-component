@@ -1,15 +1,12 @@
+/* eslint-disable func-names */
+/* eslint-disable new-cap */
+
 import {
   default as expect,
 } from "expect";
 
 import {
-  default as jsdom,
-} from "mocha-jsdom";
-
-import {
   default as React,
-  Children,
-  PropTypes,
   Component,
 } from "react";
 
@@ -29,24 +26,22 @@ import {
   Componentize,
 } from "../../index";
 
-function noop () {
+function noop() {
 }
 
-describe(`React`, () => {
-  describe(`Componentize`, () => {
-    jsdom();
-
-    it(`should exist`, () => {
+describe(`React`, function () {
+  describe(`Componentize`, function () {
+    it(`should exist`, function () {
       expect(Componentize).toExist();
     });
 
-    context(`when called`, () => {
-      it(`returns a function`, () => {
+    context(`when called`, function () {
+      it(`returns a function`, function () {
         expect(Componentize()).toBeA(`function`);
       });
 
-      context(`when called with "render" function`, () => {
-        it(`returns ReduxComponent, a React.Component class`, () => {
+      context(`when called with "render" function`, function () {
+        it(`returns ReduxComponent, a React.Component class`, function () {
           const ReduxComponent = Componentize()();
 
           expect(ReduxComponent.prototype).toBeA(Component);
@@ -55,8 +50,8 @@ describe(`React`, () => {
       });
     });
 
-    describe(`(_1, _2, mapDispatchToLifecycle)`, () => {
-      it(`should contain React.Component lifecycle functions`, () => {
+    describe(`(_1, _2, mapDispatchToLifecycle)`, function () {
+      it(`should contain React.Component lifecycle functions`, function () {
         const ReduxComponent = Componentize(createStore, () => ({}), noop, noop)();
         const comp = new ReduxComponent();
 
@@ -68,24 +63,28 @@ describe(`React`, () => {
         expect(comp.componentWillUnmount).toBeA(`function`);
       });
 
-      it(`should invoke action inside React.Component lifecycle functions`, () => {
+      it(`should invoke action inside React.Component lifecycle functions`, function () {
         const lifecycleCallbacks = {
-          componentWillMount () {},
-          componentDidMount () {},
-          componentWillReceiveProps () {},
-          componentWillUpdate () {},
-          componentDidUpdate () {},
-          componentWillUnmount () {},
+          componentWillMount() {},
+          componentDidMount() {},
+          componentWillReceiveProps() {},
+          componentWillUpdate() {},
+          componentDidUpdate() {},
+          componentWillUnmount() {},
         };
 
         const spies = Object.keys(lifecycleCallbacks).reduce((acc, key) => {
+          /* eslint-disable no-param-reassign */
           acc[key] = expect.spyOn(lifecycleCallbacks, key);
+          /* eslint-enable no-param-reassign */
           return acc;
         }, {});
 
         const mapDispatchToLifecycle = () => lifecycleCallbacks;
 
-        const ReduxComponent = Componentize(createStore, () => ({}), mapDispatchToLifecycle, noop)();
+        const ReduxComponent = Componentize(
+          createStore, () => ({}), mapDispatchToLifecycle, noop
+        )();
         const comp = new ReduxComponent();
 
         Object.keys(spies).forEach(key =>
@@ -93,7 +92,7 @@ describe(`React`, () => {
         );
 
         Object.keys(lifecycleCallbacks).forEach(key =>
-          comp[key]()
+          comp[key]({}, {})
         );
 
         Object.keys(spies).forEach(key =>
@@ -101,24 +100,30 @@ describe(`React`, () => {
         );
       });
 
-      it(`should invoke actions with correct arguments in certain React.Component lifecycle functions`, () => {
+      /* eslint-disable max-len */
+      it(`should invoke actions with correct arguments in certain Component lifecycle functions`, function () {
+      /* eslint-enable max-len */
         const lifecycleCallbacks = {
-          componentWillMount (props) {},
-          componentDidMount (props) {},
-          componentWillReceiveProps (props, nextProps) {},
-          componentWillUpdate (props, nextProps) {},
-          componentDidUpdate (props, prevProps) {},
-          componentWillUnmount (props) {},
+          componentWillMount(props) {},
+          componentDidMount(props) {},
+          componentWillReceiveProps(props, nextProps) {},
+          componentWillUpdate(props, nextProps) {},
+          componentDidUpdate(props, prevProps) {},
+          componentWillUnmount(props) {},
         };
 
         const spies = Object.keys(lifecycleCallbacks).reduce((acc, key) => {
+          /* eslint-disable no-param-reassign */
           acc[key] = expect.spyOn(lifecycleCallbacks, key);
+          /* eslint-enable no-param-reassign */
           return acc;
         }, {});
 
         const mapDispatchToLifecycle = () => lifecycleCallbacks;
 
-        const ReduxComponent = Componentize(createStore, () => ({}), mapDispatchToLifecycle, noop)();
+        const ReduxComponent = Componentize(
+          createStore, () => ({}), mapDispatchToLifecycle, noop
+        )();
         const comp = new ReduxComponent({
           name: `Tom Chen`,
         });
@@ -151,7 +156,7 @@ describe(`React`, () => {
 
         comp.componentWillUpdate({
           email: `developer@tomchentw.com`,
-        });
+        }, {});
 
         expect(spies.componentWillUpdate).toHaveBeenCalledWith({
           name: `Tom Chen`,
@@ -161,7 +166,7 @@ describe(`React`, () => {
 
         comp.componentDidUpdate({
           age: 0,
-        });
+        }, {});
 
         expect(spies.componentDidUpdate).toHaveBeenCalledWith({
           name: `Tom Chen`,
@@ -176,13 +181,13 @@ describe(`React`, () => {
         });
       });
     });
-    
-    describe(`(_1, _2, _3, mapDispatchToActions) with render function`, () => {
-      context(`(_1, _2, _3, mapDispatchToActions)`, () => {
-        it(`should pass actions as third arguments of render`, (done) => {
+
+    describe(`(_1, _2, _3, mapDispatchToActions) with render function`, function () {
+      context(`(_1, _2, _3, mapDispatchToActions)`, function () {
+        it(`should pass actions as third arguments of render`, function (done) {
           const mapDispatchToActions = (dispatch) => {
             return {
-              customAction () {
+              customAction() {
                 dispatch({
                   type: `CUSTOM_ACTION`,
                 });
@@ -190,7 +195,7 @@ describe(`React`, () => {
             };
           };
 
-          let customActionTriggered = false;          
+          let customActionTriggered = false;
 
           const render = (props, state, actions) => {
             expect(actions.customAction).toBeA(`function`);
@@ -205,14 +210,16 @@ describe(`React`, () => {
             return <div />;
           };
 
-          const ReduxComponent = Componentize(createStore, () => ({}), noop, mapDispatchToActions)(render);
+          const ReduxComponent = Componentize(
+            createStore, () => ({}), noop, mapDispatchToActions
+          )(render);
 
-          const comp = TestUtils.renderIntoDocument(<ReduxComponent />);
+          TestUtils.renderIntoDocument(<ReduxComponent />);
         });
       });
 
-      context(`render`, () => {
-        it(`should pass props and null state`, (done) => {
+      context(`render`, function () {
+        it(`should pass props and null state`, function (done) {
           const render = (props, state, actions) => {
             expect(props).toBeA(`object`);
             expect(props).toEqual({
@@ -226,14 +233,14 @@ describe(`React`, () => {
 
           const ReduxComponent = Componentize(createStore, () => undefined, noop, noop)(render);
 
-          const comp = TestUtils.renderIntoDocument(
+          TestUtils.renderIntoDocument(
             <ReduxComponent
               name="Tom Chen"
             />
           );
         });
 
-        it(`should pass props and initial state from reducer`, (done) => {
+        it(`should pass props and initial state from reducer`, function (done) {
           const render = (props, state, actions) => {
             expect(props).toBeA(`object`);
             expect(props).toEqual({
@@ -254,7 +261,7 @@ describe(`React`, () => {
 
           const ReduxComponent = Componentize(createStore, () => initialState, noop, noop)(render);
 
-          const comp = TestUtils.renderIntoDocument(
+          TestUtils.renderIntoDocument(
             <ReduxComponent
               name="Tom Chen"
             />
@@ -262,11 +269,11 @@ describe(`React`, () => {
         });
       });
 
-      context(`dispatch an action`, () => {
-        it(`should update the state and pass in to render`, (done) => {
+      context(`dispatch an action`, function () {
+        it(`should update the state and pass in to render`, function (done) {
           const mapDispatchToActions = (dispatch) => {
             return {
-              getOlder () {
+              getOlder() {
                 dispatch({
                   type: `GET_OLDER`,
                   age: 1,
@@ -318,9 +325,11 @@ describe(`React`, () => {
             return state;
           };
 
-          const ReduxComponent = Componentize(createStore, reducer, noop, mapDispatchToActions)(render);
+          const ReduxComponent = Componentize(
+            createStore, reducer, noop, mapDispatchToActions
+          )(render);
 
-          const comp = TestUtils.renderIntoDocument(
+          TestUtils.renderIntoDocument(
             <ReduxComponent
               name="Tom Chen"
             />
@@ -328,7 +337,7 @@ describe(`React`, () => {
         });
       });
 
-      it(`will clean up Component after unmount`, () => {
+      it(`will clean up Component after unmount`, function () {
         const ReduxComponent = Componentize(createStore, () => ({}), noop, noop)(() => (<div />));
 
         const div = document.createElement(`div`);

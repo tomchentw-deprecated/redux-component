@@ -1,21 +1,13 @@
+/* eslint-disable func-names */
+
 import {
   default as expect,
 } from "expect";
 
 import {
-  default as jsdom,
-} from "mocha-jsdom";
-
-import {
   default as React,
-  Children,
-  PropTypes,
   Component,
 } from "react";
-
-import {
-  default as ReactDOM,
-} from "react-dom";
 
 import {
   default as TestUtils,
@@ -25,44 +17,41 @@ import {
   createDispatch,
 } from "../../index";
 
-function noop () {
-}
-
-describe(`redux-component`, () => {
-  describe(`createDispatch`, () => {
-    jsdom();
-
-    it(`should exist`, () => {
+describe(`redux-component`, function () {
+  describe(`createDispatch`, function () {
+    it(`should exist`, function () {
       expect(createDispatch).toExist();
     });
 
-    it(`should have signature of (component, reducer)`, () => {
+    it(`should have signature of (component, reducer)`, function () {
       expect(createDispatch.length).toEqual(2);
     });
 
-    describe(`returns function dispatch`, () => {
+    describe(`returns function dispatch`, function () {
       let mockedComp;
 
-      beforeEach(() => {
-        const mockedReducer = (state = {value: `INITIAL_STATE`}, action) => ({...state, ...action});
+      beforeEach(function () {
+        const mockedReducer = (state = { value: `INITIAL_STATE` }, action) => (
+          { ...state, ...action }
+        );
 
         class MockedComponent extends Component {
-          constructor (...args) {
+          constructor(...args) {
             super(...args);
             this.dispatch = createDispatch(this, mockedReducer);
           }
 
-          render () { return <div/>; }
+          render() { return <div/>; }
         }
 
         mockedComp = TestUtils.renderIntoDocument(<MockedComponent />);
       });
 
-      it(`should have initial state from reducer`, () => {
+      it(`should have initial state from reducer`, function () {
         expect(mockedComp.state.value).toEqual(`INITIAL_STATE`);
       });
 
-      it(`should change the component's state by dispatching an action`, (done) => {
+      it(`should change the component's state by dispatching an action`, function (done) {
         expect(mockedComp.state.value).toNotEqual(`ANOTHER_VALUE`);
 
         mockedComp.dispatch({

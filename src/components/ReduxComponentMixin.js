@@ -2,9 +2,9 @@ import {
   createStore,
 } from "redux";
 
-export default function ReduxComponentMixin (reducer) {
+export default function ReduxComponentMixin(reducer) {
   return {
-    getInitialState () {
+    getInitialState() {
       this.store = createStore(reducer);
       this.unsubscribeFromStore = this.store.subscribe(() => {
         this.setState(this.store.getState());
@@ -13,7 +13,7 @@ export default function ReduxComponentMixin (reducer) {
       return this.store.getState();
     },
 
-    componentWillUnmount () {
+    componentWillUnmount() {
       this.unsubscribeFromStore();
     },
   };
