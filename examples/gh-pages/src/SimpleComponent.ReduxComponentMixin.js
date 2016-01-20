@@ -1,6 +1,15 @@
-import React from "react";
-import { ReduxComponentMixin } from "../../../src/index";
-import randomPromise from "./randomPromise";
+import {
+  default as React,
+  PropTypes,
+} from "react";
+
+import {
+  ReduxComponentMixin,
+} from "redux-component";
+
+import {
+  default as randomPromise,
+} from "./randomPromise";
 
 // Hey let's just borrow from ES2015 class version
 import {
@@ -15,12 +24,23 @@ import {
   reducer,
 } from "./SimpleComponent.createDispatch";
 
+/* eslint-disable react/prefer-es6-class */
 // Here we define React Component using React.createClass & mixins
 export const Component = React.createClass({
 
-  mixins: [ReduxComponentMixin(reducer)],
+  propTypes: {
+    userId: PropTypes.any.isRequired,
+    globlaReduxActionGetUsername: PropTypes.any.isRequired,
+    globlaReduxActionSubmitForm: PropTypes.any.isRequired,
+  },
 
-  getDefaultProps () {
+  mixins: [
+    /* eslint-disable new-cap */
+    ReduxComponentMixin(reducer),
+    /* eslint-enable new-cap */
+  ],
+
+  getDefaultProps() {
     return {
       userId: 1,
       globlaReduxActionGetUsername: randomPromise,
@@ -28,27 +48,27 @@ export const Component = React.createClass({
     };
   },
 
-  componentDidMount () {
+  componentDidMount() {
     this.dispatch({
       type: LOAD_USERNAME_REQUEST,
     });
-    
+
     this.props.globlaReduxActionGetUsername(this.props.userId)
       .then((username) => {
         this.dispatch({
           type: LOAD_USERNAME_SUCCESS,
-          username: username,
+          username,
         });
       })
       .catch((error) => {
         this.dispatch({
           type: LOAD_USERNAME_FAILURE,
-          error: error,
+          error,
         });
       });
   },
 
-  handleSubmitForm (event) {
+  handleSubmitForm(event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -56,7 +76,7 @@ export const Component = React.createClass({
       type: SUBMIT_FORM_REQUEST,
     });
 
-    const {formValues} = this.state;
+    const { formValues } = this.state;
 
     this.props.globlaReduxActionSubmitForm(formValues)
       .then(() => {
@@ -67,24 +87,24 @@ export const Component = React.createClass({
       .catch((error) => {
         this.dispatch({
           type: SUBMIT_FORM_FAILURE,
-          error: error,
+          error,
         });
       });
   },
 
-  renderUsername () {
+  renderUsername() {
     if (this.state.usernameLoading) {
       return (
         <label>Username loading ... (user id: {this.props.userId})</label>
-      )
+      );
     } else {
       return (
         <label>Your username: {this.state.username}</label>
-      )
+      );
     }
   },
 
-  renderError () {
+  renderError() {
     if (this.state.error) {
       return (
         <p className="error">{this.state.error.message}</p>
@@ -94,25 +114,27 @@ export const Component = React.createClass({
     }
   },
 
-  render () {
+  render() {
+    /* eslint-disable react/jsx-no-bind */
     return (
       <form onSubmit={this.handleSubmitForm}>
         {this.renderUsername()}
         {this.renderError()}
         <input type="text" value={this.state.formValues.name} onChange={event => this.dispatch({
-            type: TEXT_CHANGED,
-            formKey: `name`,
-            value: event.target.value,
-          })} 
+          type: TEXT_CHANGED,
+          formKey: `name`,
+          value: event.target.value,
+        })}
         />
         <input type="email" value={this.state.formValues.email} onChange={event => this.dispatch({
-            type: TEXT_CHANGED,
-            formKey: `email`,
-            value: event.target.value,
-          })}
+          type: TEXT_CHANGED,
+          formKey: `email`,
+          value: event.target.value,
+        })}
         />
         <button type="submit">Hi</button>
       </form>
     );
+    /* eslint-enable react/jsx-no-bind */
   },
 });

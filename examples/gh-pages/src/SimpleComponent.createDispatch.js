@@ -1,6 +1,15 @@
-import React from "react";
-import { createDispatch } from "../../../src/index";
-import randomPromise from "./randomPromise";
+import {
+  default as React,
+  PropTypes,
+} from "react";
+
+import {
+  createDispatch,
+} from "redux-component";
+
+import {
+  default as randomPromise,
+} from "./randomPromise";
 
 export const TEXT_CHANGED = `TEXT_CHANGED`;
 
@@ -22,7 +31,7 @@ const initialState = {
   username: null,
 };
 
-export function reducer (state = initialState, action) {
+export function reducer(state = initialState, action) {
   switch (action.type) {
     case TEXT_CHANGED:
       return {
@@ -54,7 +63,7 @@ export function reducer (state = initialState, action) {
         usernameLoading: false,
         username: action.username,
       };
-    case LOAD_USERNAME_SUCCESS:
+    case LOAD_USERNAME_FAILURE:
       return {
         ...state,
         error: action.error,
@@ -62,43 +71,46 @@ export function reducer (state = initialState, action) {
       };
     default:
       return state;
-  };
+  }
 }
 
 export class Component extends React.Component {
+
+  static propTypes = {
+    userId: PropTypes.any.isRequired,
+    globlaReduxActionGetUsername: PropTypes.any.isRequired,
+    globlaReduxActionSubmitForm: PropTypes.any.isRequired,
+  };
 
   static defaultProps = {
     userId: 1,
     globlaReduxActionGetUsername: randomPromise,
     globlaReduxActionSubmitForm: randomPromise,
-  }
+  };
 
-  constructor (...args) {
-    super(...args);
-    this.dispatch = createDispatch(this, reducer);
-  }
-
-  componentDidMount () {
+  componentDidMount() {
     this.dispatch({
       type: LOAD_USERNAME_REQUEST,
     });
-    
+
     this.props.globlaReduxActionGetUsername(this.props.userId)
       .then((username) => {
         this.dispatch({
           type: LOAD_USERNAME_SUCCESS,
-          username: username,
+          username,
         });
       })
       .catch((error) => {
         this.dispatch({
           type: LOAD_USERNAME_FAILURE,
-          error: error,
+          error,
         });
       });
   }
 
-  handleSubmitForm (event) {
+  dispatch = createDispatch(this, reducer);
+
+  handleSubmitForm(event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -106,7 +118,7 @@ export class Component extends React.Component {
       type: SUBMIT_FORM_REQUEST,
     });
 
-    const {formValues} = this.state;
+    const { formValues } = this.state;
 
     this.props.globlaReduxActionSubmitForm(formValues)
       .then(() => {
@@ -117,24 +129,24 @@ export class Component extends React.Component {
       .catch((error) => {
         this.dispatch({
           type: SUBMIT_FORM_FAILURE,
-          error: error,
+          error,
         });
       });
   }
 
-  renderUsername () {
+  renderUsername() {
     if (this.state.usernameLoading) {
       return (
         <label>Username loading ... (user id: {this.props.userId})</label>
-      )
+      );
     } else {
       return (
         <label>Your username: {this.state.username}</label>
-      )
+      );
     }
   }
 
-  renderError () {
+  renderError() {
     if (this.state.error) {
       return (
         <p className="error">{this.state.error.message}</p>
@@ -144,25 +156,27 @@ export class Component extends React.Component {
     }
   }
 
-  render () {
+  render() {
+    /* eslint-disable react/jsx-no-bind */
     return (
       <form onSubmit={::this.handleSubmitForm}>
         {this.renderUsername()}
         {this.renderError()}
         <input type="text" value={this.state.formValues.name} onChange={event => this.dispatch({
-            type: TEXT_CHANGED,
-            formKey: `name`,
-            value: event.target.value,
-          })} 
+          type: TEXT_CHANGED,
+          formKey: `name`,
+          value: event.target.value,
+        })}
         />
         <input type="email" value={this.state.formValues.email} onChange={event => this.dispatch({
-            type: TEXT_CHANGED,
-            formKey: `email`,
-            value: event.target.value,
-          })}
+          type: TEXT_CHANGED,
+          formKey: `email`,
+          value: event.target.value,
+        })}
         />
         <button type="submit">Hi</button>
       </form>
     );
+    /* eslint-enable react/jsx-no-bind */
   }
 }

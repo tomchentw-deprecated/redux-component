@@ -1,3 +1,3 @@
-import {default as ReactRoot} from "./ReactRoot";
+import { default as ReactRoot } from "./ReactRoot";
 
 export default ReactRoot;

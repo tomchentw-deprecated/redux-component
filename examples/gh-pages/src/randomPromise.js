@@ -1,5 +1,5 @@
 
-export default function randomPromise () {
+export default function randomPromise() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (Math.random() > 0.2) {

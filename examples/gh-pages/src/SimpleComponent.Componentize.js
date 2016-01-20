@@ -1,31 +1,47 @@
-import React from "react";
-import { createStore, applyMiddleware, bindActionCreators } from "redux";
-import thunkMiddleware from "redux-thunk";
-import { Componentize } from "../../../src/index";
-import randomPromise from "./randomPromise";
+import {
+  default as React,
+} from "react";
 
-const TEXT_CHANGED = `redux-component/example/gh-pages/SimpleComponent/TEXT_CHANGED`;
+import {
+  createStore,
+  applyMiddleware,
+  bindActionCreators,
+} from "redux";
 
-const SUBMIT_FORM_REQUEST = `redux-component/example/gh-pages/SimpleComponent/SUBMIT_FORM_REQUEST`;
-const SUBMIT_FORM_SUCCESS = `redux-component/example/gh-pages/SimpleComponent/SUBMIT_FORM_SUCCESS`;
-const SUBMIT_FORM_FAILURE = `redux-component/example/gh-pages/SimpleComponent/SUBMIT_FORM_FAILURE`;
+import {
+  default as thunkMiddleware,
+} from "redux-thunk";
 
-export const textChanged = (formKey, event) => {
+import {
+  Componentize,
+} from "redux-component";
+
+import {
+  default as randomPromise,
+} from "./randomPromise";
+
+const TEXT_CHANGED = `SimpleComponent/TEXT_CHANGED`;
+
+const SUBMIT_FORM_REQUEST = `SimpleComponent/SUBMIT_FORM_REQUEST`;
+const SUBMIT_FORM_SUCCESS = `SimpleComponent/SUBMIT_FORM_SUCCESS`;
+const SUBMIT_FORM_FAILURE = `SimpleComponent/SUBMIT_FORM_FAILURE`;
+
+export function textChanged(formKey, event) {
   return {
     type: TEXT_CHANGED,
-    formKey: formKey,
+    formKey,
     value: event.target.value,
   };
-};
+}
 
-export const submitForm = (props, event) =>{
+export function submitForm(props, event) {
   return (dispatch, getState) => {
     event.preventDefault();
     event.stopPropagation();
 
     dispatch(submitFormRequest());
 
-    const {formValues} = getState();
+    const { formValues } = getState();
 
     props.globlaReduxActionSubmitForm(formValues)
       .then(() => {
@@ -34,33 +50,33 @@ export const submitForm = (props, event) =>{
       .catch((error) => {
         dispatch(submitFormFailure(error));
       });
-  }
-};
+  };
+}
 
-export function submitFormRequest () {
+export function submitFormRequest() {
   return {
     type: SUBMIT_FORM_REQUEST,
   };
 }
 
-export function submitFormSuccess () {
+export function submitFormSuccess() {
   return {
     type: SUBMIT_FORM_SUCCESS,
   };
 }
 
-export function submitFormFailure (error) {
+export function submitFormFailure(error) {
   return {
     type: SUBMIT_FORM_FAILURE,
-    error: error,
+    error,
   };
 }
 
 // Lifecycle --- BEGIN
-export const componentDidMount = (props) => {
+export function componentDidMount(props) {
   return (dispatch, getState) => {
     dispatch(loadUsernameRequest());
-    
+
     props.globlaReduxActionGetUsername(props.userId)
       .then((username) => {
         dispatch(loadUsernameSuccess(username));
@@ -69,29 +85,29 @@ export const componentDidMount = (props) => {
         dispatch(loadUsernameFailure(error));
       });
   };
-};
+}
 
-const LOAD_USERNAME_REQUEST = `redux-component/example/gh-pages/SimpleComponent/LOAD_USERNAME_REQUEST`;
-const LOAD_USERNAME_SUCCESS = `redux-component/example/gh-pages/SimpleComponent/LOAD_USERNAME_SUCCESS`;
-const LOAD_USERNAME_FAILURE = `redux-component/example/gh-pages/SimpleComponent/LOAD_USERNAME_FAILURE`;
+const LOAD_USERNAME_REQUEST = `SimpleComponent/LOAD_USERNAME_REQUEST`;
+const LOAD_USERNAME_SUCCESS = `SimpleComponent/LOAD_USERNAME_SUCCESS`;
+const LOAD_USERNAME_FAILURE = `SimpleComponent/LOAD_USERNAME_FAILURE`;
 
-export function loadUsernameRequest () {
+export function loadUsernameRequest() {
   return {
     type: LOAD_USERNAME_REQUEST,
   };
 }
 
-export function loadUsernameSuccess (username) {
+export function loadUsernameSuccess(username) {
   return {
     type: LOAD_USERNAME_SUCCESS,
-    username: username,
+    username,
   };
 }
 
-export function loadUsernameFailure (error) {
+export function loadUsernameFailure(error) {
   return {
     type: LOAD_USERNAME_FAILURE,
-    error: error,
+    error,
   };
 }
 
@@ -108,7 +124,7 @@ const initialState = {
   username: null,
 };
 
-export function reducer (state = initialState, action) {
+export function reducer(state = initialState, action) {
   switch (action.type) {
     case TEXT_CHANGED:
       return {
@@ -140,7 +156,7 @@ export function reducer (state = initialState, action) {
         usernameLoading: false,
         username: action.username,
       };
-    case LOAD_USERNAME_SUCCESS:
+    case LOAD_USERNAME_FAILURE:
       return {
         ...state,
         error: action.error,
@@ -148,7 +164,7 @@ export function reducer (state = initialState, action) {
       };
     default:
       return state;
-  };
+  }
 }
 
 const createStoreWithMiddleware = applyMiddleware(
@@ -156,34 +172,38 @@ const createStoreWithMiddleware = applyMiddleware(
 )(createStore);
 
 // only visible inside Componentize.
-const mapDispatchToLifecycle = (dispatch) => {
+function mapDispatchToLifecycle(dispatch) {
   return bindActionCreators({
     componentDidMount,
   }, dispatch);
-};
+}
 
-const mapDispatchToActions = (dispatch) => {
+function mapDispatchToActions(dispatch) {
   return bindActionCreators({
     textChanged,
     submitForm,
   }, dispatch);
-};
+}
 
-const createComponent = Componentize(createStoreWithMiddleware, reducer, mapDispatchToLifecycle, mapDispatchToActions);
+/* eslint-disable new-cap */
+const createComponent = Componentize(
+  createStoreWithMiddleware, reducer, mapDispatchToLifecycle, mapDispatchToActions
+);
+/* eslint-enable new-cap */
 
-const renderUsername = (usernameLoading, userId, username) => {
+function renderUsername(usernameLoading, userId, username) {
   if (usernameLoading) {
     return (
       <label>Username loading ... (user id: {userId})</label>
-    )
+    );
   } else {
     return (
       <label>Your username: {username}</label>
-    )
+    );
   }
-};
+}
 
-const renderError = (error) => {
+function renderError(error) {
   if (error) {
     return (
       <p className="error">{error.message}</p>
@@ -191,18 +211,28 @@ const renderError = (error) => {
   } else {
     return null;
   }
-};
+}
 
-export const Component = createComponent(function SimpleComponent (props, state, actions) {
+export const Component = createComponent(function SimpleComponent(props, state, actions) {
+  /* eslint-disable react/jsx-no-bind */
   return (
     <form onSubmit={e => actions.submitForm(props, e)}>
       {renderUsername(state.usernameLoading, props.userId, state.username)}
       {renderError(state.error)}
-      <input type="text" value={state.formValues.name} onChange={e => actions.textChanged(`name`, e)} />
-      <input type="email" value={state.formValues.email} onChange={e => actions.textChanged(`email`, e)} />
+      <input
+        type="text"
+        value={state.formValues.name}
+        onChange={e => actions.textChanged(`name`, e)}
+      />
+      <input
+        type="email"
+        value={state.formValues.email}
+        onChange={e => actions.textChanged(`email`, e)}
+      />
       <button type="submit">Hi</button>
     </form>
   );
+  /* eslint-enable react/jsx-no-bind */
 });
 
 Component.defaultProps = {
