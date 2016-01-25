@@ -1,3 +1,18 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/tomchentw/redux-component/compare/v0.2.0...v0.3.0) (2016-01-25)
+
+
+### Features
+
+* **lib:** compile from src using babel ([0177a43](https://github.com/tomchentw/redux-component/commit/0177a43))
+
+
+### BREAKING CHANGES
+
+* lib: Remove commonjs (module.exports) support
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/tomchentw/redux-component/compare/v0.1.0...v0.2.0) (2015-11-21)
 
