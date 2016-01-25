@@ -1,4 +1,4 @@
-/* eslint-disable func-names */
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable new-cap */
 
 import {
@@ -17,17 +17,17 @@ import {
   ReduxComponentMixin,
 } from "../../index";
 
-describe(`redux-component`, function () {
-  describe(`ReduxComponentMixin`, function () {
-    it(`should exist`, function () {
+describe(`redux-component`, function describeReduxComponent() {
+  describe(`ReduxComponentMixin`, function describeReduxComponentMixin() {
+    it(`should exist`, function it() {
       expect(ReduxComponentMixin).toExist();
     });
 
-    it(`should have signature of (reducer)`, function () {
+    it(`should have signature of (reducer)`, function it() {
       expect(ReduxComponentMixin.length).toEqual(1);
     });
 
-    it(`returns a mixin object`, function () {
+    it(`returns a mixin object`, function it() {
       const mixin = ReduxComponentMixin(() => ({}));
 
       expect(mixin.getInitialState).toBeA(`function`, `and have getInitialState function`);
@@ -36,10 +36,10 @@ describe(`redux-component`, function () {
       );
     });
 
-    describe(`mixed into React.createClass`, function () {
+    describe(`mixed into React.createClass`, function describeMixedIntoReactCreateClass() {
       let mockedComp;
 
-      beforeEach(function () {
+      beforeEach(function beforeEachDescribe() {
         const mockedReducer = (state = { value: `INITIAL_STATE` }, action) => (
           { ...state, ...action }
         );
@@ -54,11 +54,11 @@ describe(`redux-component`, function () {
         mockedComp = TestUtils.renderIntoDocument(<MockedComponent />);
       });
 
-      it(`should have initial state from reducer`, function () {
+      it(`should have initial state from reducer`, function it() {
         expect(mockedComp.state.value).toEqual(`INITIAL_STATE`);
       });
 
-      it(`should change the component's state by dispatching an action`, (done) => {
+      it(`should change the component's state by dispatching an action`, function it(done) {
         expect(mockedComp.state.value).toNotEqual(`ANOTHER_VALUE`);
 
         mockedComp.dispatch({

@@ -1,4 +1,4 @@
-/* eslint-disable func-names */
+/* eslint-disable prefer-arrow-callback */
 
 import {
   default as expect,
@@ -17,20 +17,20 @@ import {
   createDispatch,
 } from "../../index";
 
-describe(`redux-component`, function () {
-  describe(`createDispatch`, function () {
-    it(`should exist`, function () {
+describe(`redux-component`, function describeReduxComponent() {
+  describe(`createDispatch`, function describeCreateDispatch() {
+    it(`should exist`, function it() {
       expect(createDispatch).toExist();
     });
 
-    it(`should have signature of (component, reducer)`, function () {
+    it(`should have signature of (component, reducer)`, function it() {
       expect(createDispatch.length).toEqual(2);
     });
 
-    describe(`returns function dispatch`, function () {
+    describe(`returns function dispatch`, function describeReturnsFunctionDispatch() {
       let mockedComp;
 
-      beforeEach(function () {
+      beforeEach(function beforeEachDescribe() {
         const mockedReducer = (state = { value: `INITIAL_STATE` }, action) => (
           { ...state, ...action }
         );
@@ -47,11 +47,11 @@ describe(`redux-component`, function () {
         mockedComp = TestUtils.renderIntoDocument(<MockedComponent />);
       });
 
-      it(`should have initial state from reducer`, function () {
+      it(`should have initial state from reducer`, function it() {
         expect(mockedComp.state.value).toEqual(`INITIAL_STATE`);
       });
 
-      it(`should change the component's state by dispatching an action`, function (done) {
+      it(`should change the component's state by dispatching an action`, function it(done) {
         expect(mockedComp.state.value).toNotEqual(`ANOTHER_VALUE`);
 
         mockedComp.dispatch({

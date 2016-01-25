@@ -1,4 +1,4 @@
-/* eslint-disable func-names */
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable new-cap */
 
 import {
@@ -29,19 +29,19 @@ import {
 function noop() {
 }
 
-describe(`React`, function () {
-  describe(`Componentize`, function () {
-    it(`should exist`, function () {
+describe(`React`, function describeReact() {
+  describe(`Componentize`, function describeComponentize() {
+    it(`should exist`, function it() {
       expect(Componentize).toExist();
     });
 
-    context(`when called`, function () {
-      it(`returns a function`, function () {
+    context(`when called`, function contextWhenCalled() {
+      it(`returns a function`, function it() {
         expect(Componentize()).toBeA(`function`);
       });
 
-      context(`when called with "render" function`, function () {
-        it(`returns ReduxComponent, a React.Component class`, function () {
+      context(`when called with "render" function`, function contextWhenCalledWithRender() {
+        it(`returns ReduxComponent, a React.Component class`, function it() {
           const ReduxComponent = Componentize()();
 
           expect(ReduxComponent.prototype).toBeA(Component);
@@ -50,8 +50,8 @@ describe(`React`, function () {
       });
     });
 
-    describe(`(_1, _2, mapDispatchToLifecycle)`, function () {
-      it(`should contain React.Component lifecycle functions`, function () {
+    describe(`(_1, _2, mapDispatchToLifecycle)`, function describeMapDispatchToLifecycle() {
+      it(`should contain React.Component lifecycle functions`, function it() {
         const ReduxComponent = Componentize(createStore, () => ({}), noop, noop)();
         const comp = new ReduxComponent();
 
@@ -63,7 +63,7 @@ describe(`React`, function () {
         expect(comp.componentWillUnmount).toBeA(`function`);
       });
 
-      it(`should invoke action inside React.Component lifecycle functions`, function () {
+      it(`should invoke action inside React.Component lifecycle functions`, function it() {
         const lifecycleCallbacks = {
           componentWillMount() {},
           componentDidMount() {},
@@ -101,7 +101,7 @@ describe(`React`, function () {
       });
 
       /* eslint-disable max-len */
-      it(`should invoke actions with correct arguments in certain Component lifecycle functions`, function () {
+      it(`should invoke actions with correct arguments in certain Component lifecycle functions`, function it() {
       /* eslint-enable max-len */
         const lifecycleCallbacks = {
           componentWillMount(props) {},
@@ -182,18 +182,18 @@ describe(`React`, function () {
       });
     });
 
-    describe(`(_1, _2, _3, mapDispatchToActions) with render function`, function () {
-      context(`(_1, _2, _3, mapDispatchToActions)`, function () {
-        it(`should pass actions as third arguments of render`, function (done) {
-          const mapDispatchToActions = (dispatch) => {
-            return {
-              customAction() {
-                dispatch({
-                  type: `CUSTOM_ACTION`,
-                });
-              },
-            };
-          };
+    /* eslint-disable max-len */
+    describe(`(_1, _2, _3, mapDispatchToActions) with render function`, function describeMapDispatchToActions() {
+    /* eslint-enable max-len */
+      context(`(_1, _2, _3, mapDispatchToActions)`, function contextMapDispatchToActions() {
+        it(`should pass actions as third arguments of render`, function it(done) {
+          const mapDispatchToActions = dispatch => ({
+            customAction() {
+              dispatch({
+                type: `CUSTOM_ACTION`,
+              });
+            },
+          });
 
           let customActionTriggered = false;
 
@@ -218,8 +218,8 @@ describe(`React`, function () {
         });
       });
 
-      context(`render`, function () {
-        it(`should pass props and null state`, function (done) {
+      context(`render`, function contextRender() {
+        it(`should pass props and null state`, function it(done) {
           const render = (props, state, actions) => {
             expect(props).toBeA(`object`);
             expect(props).toEqual({
@@ -240,7 +240,7 @@ describe(`React`, function () {
           );
         });
 
-        it(`should pass props and initial state from reducer`, function (done) {
+        it(`should pass props and initial state from reducer`, function it(done) {
           const render = (props, state, actions) => {
             expect(props).toBeA(`object`);
             expect(props).toEqual({
@@ -269,18 +269,16 @@ describe(`React`, function () {
         });
       });
 
-      context(`dispatch an action`, function () {
-        it(`should update the state and pass in to render`, function (done) {
-          const mapDispatchToActions = (dispatch) => {
-            return {
-              getOlder() {
-                dispatch({
-                  type: `GET_OLDER`,
-                  age: 1,
-                });
-              },
-            };
-          };
+      context(`dispatch an action`, function contextDispathAnAction() {
+        it(`should update the state and pass in to render`, function it(done) {
+          const mapDispatchToActions = dispatch => ({
+            getOlder() {
+              dispatch({
+                type: `GET_OLDER`,
+                age: 1,
+              });
+            },
+          });
 
           let initialRender = true;
 
@@ -337,7 +335,7 @@ describe(`React`, function () {
         });
       });
 
-      it(`will clean up Component after unmount`, function () {
+      it(`will clean up Component after unmount`, function it() {
         const ReduxComponent = Componentize(createStore, () => ({}), noop, noop)(() => (<div />));
 
         const div = document.createElement(`div`);
