@@ -213,7 +213,7 @@ function renderError(error) {
   }
 }
 
-export const Component = createComponent(function SimpleComponent(props, state, actions) {
+function SimpleComponent(props, state, actions) {
   /* eslint-disable react/jsx-no-bind */
   return (
     <form onSubmit={e => actions.submitForm(props, e)}>
@@ -233,7 +233,9 @@ export const Component = createComponent(function SimpleComponent(props, state, 
     </form>
   );
   /* eslint-enable react/jsx-no-bind */
-});
+}
+
+export const Component = createComponent(SimpleComponent);
 
 Component.defaultProps = {
   userId: 1,
